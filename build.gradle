@@ -39,12 +39,18 @@ task createContainer(type: DockerCreateContainer) {
     targetImageId { buildImage.getImageId() }
     attachStdout = true
     attachStderr = true
-    volumes = ["${projectDir}/files:/opt/source'"]
-    cmd = ["ls", "/opt"]
+    cmd = ["/opt/files/run.sh"]
+}
+
+task addFilesToContainer(type: DockerCopyFileToContainer) {
+    dependsOn createContainer
+    hostPath "${projectDir}/files"
+    remotePath '/opt' 
+    targetContainerId { createContainer.getContainerId() }	
 }
 
 task startContainer(type: DockerStartContainer) {
-    dependsOn createContainer
+    dependsOn addFilesToContainer
     finalizedBy 'logContainer'
     targetContainerId { createContainer.getContainerId() }
 }
