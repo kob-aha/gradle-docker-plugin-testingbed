@@ -25,7 +25,7 @@ apply plugin: 'com.bmuschko.docker-remote-api'
 task createDockerfile(type: Dockerfile) {
     destFile = project.file('build/mydockerfile/Dockerfile')
     from 'ubuntu:12.04'
-    maintainer 'Benjamin Muschko "benjamin.muschko@gmail.com"'
+    maintainer 'Koby Aharon "kobyahron@gmail.com"'
 }
 
 task buildImage(type: DockerBuildImage) {
