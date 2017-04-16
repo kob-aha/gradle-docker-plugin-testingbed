@@ -37,8 +37,8 @@ task buildImage(type: DockerBuildImage) {
 task createContainer(type: DockerCreateContainer) {
     dependsOn buildImage
     targetImageId { buildImage.getImageId() }
-    attachStdout = true
-    attachStderr = true
+    volumes = ['/opt/files']
+    binds = ["${projectDir}/files":'/opt/files']
     cmd = ["/opt/files/run.sh"]
 }
 
@@ -50,7 +50,7 @@ task addFilesToContainer(type: DockerCopyFileToContainer) {
 }
 
 task startContainer(type: DockerStartContainer) {
-    dependsOn addFilesToContainer
+    dependsOn createContainer
     finalizedBy 'logContainer'
     targetContainerId { createContainer.getContainerId() }
 }
